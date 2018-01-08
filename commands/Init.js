@@ -1,5 +1,8 @@
 'use strict'
 
+const fs = require('fs');
+const util = require('util');
+const copyFile = util.promisify(fs.copyFile);
 const Ioc = require('adonis-fold').Ioc;
 const BaseCommand = Ioc.use('Adonis/Src/Command');
 
@@ -40,6 +43,7 @@ class InitCommand extends BaseCommand {
 
 		} catch (e) {
 			console.error(e);
+			
 			this.error('Failed to initialize queue with error: ' + e.message);
 		}
 	}

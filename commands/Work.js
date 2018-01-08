@@ -37,7 +37,7 @@ class WorkCommand extends BaseCommand {
 				console.log(message);
 			});
 			worker.stderr.on('data', message => {
-				console.log(message);
+				console.error(message);
 			});
 		}
 

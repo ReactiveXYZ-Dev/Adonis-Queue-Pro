@@ -15,11 +15,12 @@ const Env = use('Env')
 module.exports = {
 
 	/**
-	 * Default directory for storing consumer job handlers
+	 * Default directory for storing consumer/producer job handlers
 	 *
-	 * You may modify the consumer job paths to wherever you want
+	 * You may modify the consumer/producer job paths to wherever you want
 	 */
 	'consumerPath' : Helpers.appPath() + "/Jobs/Consumers",
+	'producerPath' : Helpers.appPath() + "/Jobs/Producers",
 
 	'connection' : {
 
