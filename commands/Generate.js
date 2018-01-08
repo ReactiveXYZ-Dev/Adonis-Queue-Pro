@@ -1,5 +1,7 @@
 'use strict'
 
+const util = require('util');
+const copyFile = util.promsify(require('fs').copyFile);
 const Ioc = require('adonis-fold').Ioc;
 const BaseCommand = Ioc.use('Adonis/Src/Command');
 
@@ -12,6 +14,11 @@ const BaseCommand = Ioc.use('Adonis/Src/Command');
 
 class GenerateCommand extends BaseCommand {
 	
+
+	get signature() {
+		return "queue:generate {job:Unique name of job to process}"
+	}
+
 	/**
 	 * Inject adonis app for dependency resolution
 	 * @param  {Adonis/App} app
@@ -19,7 +26,6 @@ class GenerateCommand extends BaseCommand {
 	constructor(app) {
 		this._app = app;
 	}
-
 	
 }
 
