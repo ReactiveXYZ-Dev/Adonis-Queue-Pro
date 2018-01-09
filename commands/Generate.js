@@ -2,13 +2,11 @@
 
 const fs = require('fs');
 const util = require('util');
+const path = require('path');
 const mustache = require('mustache');
-const copyFile = util.promisify(fs.copyFile);
-const readFile = util.promisify(fs.readFile);
-const writeFile = util.promisify(fs.writeFile);
+const { copyFile, readFile, writeFile, dirExistsSync, createDir } = require('../src/utils'); 
 const { paramCase } = require('change-case');
-const Ioc = require('adonis-fold').Ioc;
-const BaseCommand = Ioc.use('Adonis/Src/Command');
+const BaseCommand = require('./BaseCommand');
 
 /**
  * Generate producer/consumer pair for new jobs
@@ -20,50 +18,45 @@ const BaseCommand = Ioc.use('Adonis/Src/Command');
 class GenerateCommand extends BaseCommand {
 
 	get signature() {
-		return "queue:generate {job:Name of job to process} {--id=@value}"
+		return "queue:generate {jobName:Name of job to process} {--jobId=@value}"
 	}
 
-	/**
-	 * Inject adonis app for dependency resolution
-	 * @param  {Adonis/App} app
-	 */
-	constructor(app) {
-		this._app = app;
-		this._helpers = this._app.use('Adonis/Src/Helpers');
-		this._config = this._app.use('Adonis/Src/Config');
-	}
-
-	* handle({ job }, { name }) {
-
-		let jobClassName = job;
-		let jobId = name;
+	* handle({ jobName }, { jobId }) {
 
 		if (!jobId) {
-			jobId = paramCase(job);
+			jobId = paramCase(jobName);
 		}
 
 		try {
 			// parse respective templates
-			const producerTmpl = yield readFile('../src/templates/producer.tmpl', 'utf8');
-			const producer = mustache.render(producerTmpl, {
-				jobClassName, jobId
+			const producerTmpl = yield readFile(path.join(__dirname, '../src/templates/producer.tmpl'), 'utf8');
+			const producerTask = mustache.render(producerTmpl, {
+				jobName, jobId
 			});
-			const consumerTmpl = yield readFile('../src/templates/consumer.tmpl', 'utf8');
-			const producer = mustache.render(consumerTmpl, {
-				jobClassName, jobId
+			const consumerTmpl = yield readFile(path.join(__dirname, '../src/templates/consumer.tmpl'), 'utf8');
+			const consumerTask = mustache.render(consumerTmpl, {
+				jobName, jobId
 			});
 
 			// save into selected directory
 			const consumerPath = this._config.get('queue.consumerPath');
 			const producerPath = this._config.get('queue.producerPath');
 
-			yield writeFile(consumerPath, consumer);
-			yield writeFile(producerPath, producer);
+			if (! dirExistsSync(consumerPath) ) {
+				yield createDir(consumerPath);
+			}
+
+			if (! dirExistsSync(producerPath) ) {
+				yield createDir(producerPath);
+			}
+
+			yield writeFile(`${consumerPath}/${jobName}.js`, consumerTask);
+			yield writeFile(`${producerPath}/${jobName}.js`, producerTask);
 
 			this.success("Job has been created");
 
 		} catch (e) {
-			console.error(e.message);
+			console.error(e.stack);
 
 			this.error("Failed to generate job classes with error " + e.message);
 		}

@@ -8,7 +8,7 @@
  * @adonis-version 3.2
  */
 
-class {{ jobClassName }} {
+class {{ jobName }} {
 
     /**
      * Concurrency for processing this job
@@ -31,7 +31,7 @@ class {{ jobClassName }} {
      * Inject custom payload into the job class
      * @param  {Object} data
      *
-     * DO NOT MODIFY
+     * DO NOT MODIFY!
      */
     constructor(data) {
         this.data = data;
@@ -50,4 +50,4 @@ class {{ jobClassName }} {
 
 }
 
-module.exports = {{ jobClassName }};
+module.exports = {{ jobName }};

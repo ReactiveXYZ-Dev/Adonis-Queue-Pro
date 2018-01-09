@@ -62,7 +62,7 @@ module.exports = function (callback) {
       | available jobs on the systems and boot up queue workers.
       |
       */
-      const Queue = require('adonis-queue-pro');
+      const Queue = use('Queue');
 
       Queue.listen().then(
           success => { console.log(success.message) }, 

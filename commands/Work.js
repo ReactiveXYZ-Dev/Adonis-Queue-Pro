@@ -1,8 +1,7 @@
 'use strict'
 
 const { fork } = require('child_process');
-const Ioc = require('adonis-fold').Ioc;
-const BaseCommand = Ioc.use('Adonis/Src/Command');
+const BaseCommand = require('./BaseCommand');
 
 /**
  * Launch queue workers to start processing
@@ -16,15 +15,6 @@ class WorkCommand extends BaseCommand {
 
 	get signature() {
 		return "queue:work {numWorkers?:Number of workers to start with default of 1}"
-	}
-
-	/**
-	 * Inject adonis app for dependency resolution
-	 * @param  {Adonis/App} app
-	 */
-	constructor(app) {
-		this._app = app;
-		this._helpers = this._app.use('Adonis/Src/Helpers');
 	}
 
 	* handle({ numWorkers }) {
@@ -43,6 +33,8 @@ class WorkCommand extends BaseCommand {
 
 		this.success('Workers are running...');
 
+		// prevent the main process from exiting...
+		setInterval(() => {}, 1000);
 	}
 }
 

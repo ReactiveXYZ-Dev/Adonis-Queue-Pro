@@ -9,7 +9,7 @@ const EventEmitter = require('events');
  * @adonis-version 3.2
  */
 
-class {{ jobClassName }} extends EventEmitter {
+class {{ jobName }} extends EventEmitter {
 
     /**
      * UUID for this job class
@@ -24,7 +24,7 @@ class {{ jobClassName }} extends EventEmitter {
      * Inject custom payload into the job class
      * @param  {Object} data
      *
-     * DO NOT MODIFY
+     * DO NOT MODIFY!
      */
     constructor(data) {
         super();
@@ -64,7 +64,7 @@ class {{ jobClassName }} extends EventEmitter {
      * @return {Void}
      */
     onInit(job) {
-        console.log("Inited CpuIntensive Job ID " + job.id);
+        console.log("Inited Job ID " + job.id);
 
         this.emit('init', job.id); // return the id of the kue job 
     }
@@ -91,4 +91,4 @@ class {{ jobClassName }} extends EventEmitter {
 
 }
 
-module.exports = {{ jobClassName }};
+module.exports = {{ jobName }};

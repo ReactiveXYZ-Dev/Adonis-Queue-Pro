@@ -19,10 +19,12 @@ class Queue {
 		this._app = app;
 		// initialize adonis logic
 		this._config = this._app.use('Adonis/Src/Config');
+		this._helpers = this._app.use('Adonis/Src/Helpers');
 		// initialize kue queue
 		this._queue = kue.createQueue(this._config.get('queue.connection'));
 		// boost number of event listeners a queue instance can listen to
 		this._queue.setMaxListeners(0);
+
 	}	
 
 	/**
@@ -31,7 +33,7 @@ class Queue {
 	 */
 	listen() {
 		const JobRegister = require('./JobRegister');
-		const register = new JobRegister(this._app);
+		const register = new JobRegister(this._config, this._helpers);
 		return register.setQueue(queue).listenForAppJobs();
 	}
 

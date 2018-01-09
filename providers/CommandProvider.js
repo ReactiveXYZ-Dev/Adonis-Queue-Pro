@@ -1,13 +1,13 @@
 'use strict'
 
+const ServiceProvider = require('adonis-fold').ServiceProvider;
+
 /**
  * Provider for injecting Ace commands into the app
  *
  * @version 1.0.0
  * @adonis-version 3.2
  */
-
-const ServiceProvider = require('adonis-fold').ServiceProvider;
 
 class CommandProvider extends ServiceProvider {
 	
@@ -24,7 +24,7 @@ class CommandProvider extends ServiceProvider {
 		this._commands.forEach(command => {
 			this.app.bind(`Adonis/Commands/Queue:${command}`, app => {
 				const Command = require(`../commands/${command}`);
-				return new Command(app);
+				return new Command(app.use('Adonis/Src/Helpers'), app.use('Adonis/Src/Config'));
 			});
 		});
 	}

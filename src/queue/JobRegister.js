@@ -14,12 +14,12 @@ class JobRegister {
 	
 	/**
 	 * Inject adonis app for accessing dynamic data
-	 * @param  {Adonis/App} app
+	 * @param  {Adonis/Src/Config} config
+	 * @param {Adonis/Src/Helpers} helpers
 	 */
-	constructor(app) {
-		this._app = app;
-		this._config = this._app.use('Adonis/Src/Config');
-		this._helpers = this._app.use('Adonis/Src/Helpers');
+	constructor(Config, Helpers) {
+		this._config = Config;
+		this._helpers = Helpers;
 	}
 
 	/**
