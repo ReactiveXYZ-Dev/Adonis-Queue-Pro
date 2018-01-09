@@ -17,11 +17,21 @@ const BaseCommand = require('./BaseCommand');
 
 class GenerateCommand extends BaseCommand {
 
+	get description() {
+		return "Create a new job";
+	}
+
 	get signature() {
 		return "queue:generate {jobName:Name of job to process} {--jobId=@value}"
 	}
 
 	* handle({ jobName }, { jobId }) {
+
+		if (!this.hasInitialized()) {
+			this.error("Please run queue:init before creating job!");
+
+			return;
+		}
 
 		if (!jobId) {
 			jobId = paramCase(jobName);

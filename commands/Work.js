@@ -12,12 +12,21 @@ const BaseCommand = require('./BaseCommand');
 
 class WorkCommand extends BaseCommand {
 	
+	get description() {
+		return "Start one or more workers";
+	}
 
 	get signature() {
 		return "queue:work {numWorkers?:Number of workers to start with default of 1}"
 	}
 
 	* handle({ numWorkers }) {
+
+		if (!this.hasInitialized()) {
+			this.error("Please run queue:init before processing!");
+
+			return;
+		}
 
 		numWorkers = parseInt(numWorkers);
 

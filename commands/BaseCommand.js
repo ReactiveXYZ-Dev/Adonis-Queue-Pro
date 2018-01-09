@@ -1,5 +1,7 @@
+const path = require('path');
 const Ioc = require('adonis-fold').Ioc;
 const BaseCommand = Ioc.use('Adonis/Src/Command');
+const { dirExistsSync } = require('../src/utils');
 
 /**
  * Convenient base class for all commands
@@ -33,6 +35,19 @@ class Command extends BaseCommand {
 	static get inject () {
 		return ['Adonis/Src/Helpers', 'Adonis/Src/Config']
 	}
+
+	/**
+	 * Check whether the queue has finished setup
+	 * @return {Boolean}
+	 */
+	hasInitialized() {
+		return this._config.get('queue') && dirExistsSync(
+				this._config.get('queue.consumerPath')
+			) && dirExistsSync(
+				this._config.get('queue.producerPath')
+			);
+	}
+
 }
 
 module.exports = Command;

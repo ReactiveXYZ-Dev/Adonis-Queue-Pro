@@ -14,6 +14,10 @@ const BaseCommand = require('./BaseCommand');
 
 class InitCommand extends BaseCommand {
 	
+	get description() {
+		return "Initialize queue requirements";
+	}
+
 	get signature() {
 		return "queue:init";
 	}
