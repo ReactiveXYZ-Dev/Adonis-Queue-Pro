@@ -1,0 +1,15 @@
+'use strict'
+
+/*
+|--------------------------------------------------------------------------
+| Queue Server Process
+|--------------------------------------------------------------------------
+|
+| Here we boot up our queue consumer process under the adonisjs framework
+|
+*/
+
+const queue = require('./bootstrap/queue')
+queue(function () {
+  use('Event').fire('queue.start')
+})

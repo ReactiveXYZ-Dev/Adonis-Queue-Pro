@@ -28,15 +28,23 @@ class WorkCommand extends BaseCommand {
 			return;
 		}
 
-		numWorkers = parseInt(numWorkers);
+		if (!this.hasJobs()) {
+			this.error("No jobs to watch for. Please use queue:generate to create jobs!");
+
+			return;
+		}
+
+		numWorkers = numWorkers ? parseInt(numWorkers) : 1;
 
 		for (let i = 1; i <= numWorkers; ++i) {
-			const worker = fork(this._helpers.basePath() + "/bootstrap/queue.js");
+			const worker = fork(this._helpers.basePath() + "/queue_server.js", [], {
+				silent: true
+			});			
 			worker.stdout.on('data', message => {
-				console.log(message);
+				console.log(`Stdout worker ${i}: ` + message.toString('utf8'));
 			});
 			worker.stderr.on('data', message => {
-				console.error(message);
+				console.error(`Stderr worker ${i}: ` + message.toString('utf8'));
 			});
 		}
 

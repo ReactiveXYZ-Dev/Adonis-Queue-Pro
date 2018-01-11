@@ -1,4 +1,5 @@
 const path = require('path');
+const dir = require('node-dir');
 const Ioc = require('adonis-fold').Ioc;
 const BaseCommand = Ioc.use('Adonis/Src/Command');
 const { dirExistsSync } = require('../src/utils');
@@ -41,11 +42,31 @@ class Command extends BaseCommand {
 	 * @return {Boolean}
 	 */
 	hasInitialized() {
-		return this._config.get('queue') && dirExistsSync(
-				this._config.get('queue.consumerPath')
-			) && dirExistsSync(
-				this._config.get('queue.producerPath')
-			);
+
+		return Boolean(this._config.get('queue'));
+	}
+
+	/**
+	 * Check whether the app has jobs
+	 * @return {Boolean}
+	 */
+	hasJobs() {
+
+		const consumerPath = this._config.get('queue.consumerPath');
+		const producerPath = this._config.get('queue.producerPath');
+
+		if (!dirExistsSync(consumerPath) || !dirExistsSync(producerPath)) {
+			return false;
+		}
+
+		let files = dir.files(consumerPath, { sync: true });
+		if (files.length == 0) return false;
+
+		files = dir.files(producerPath, { sync: true });
+		if (files.length == 0) return false;
+
+		return true;
+
 	}
 
 }

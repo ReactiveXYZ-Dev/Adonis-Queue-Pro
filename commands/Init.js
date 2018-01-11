@@ -32,6 +32,9 @@ class InitCommand extends BaseCommand {
 			yield copyFile(path.join(__dirname, '../src/templates/server.tmpl'),
 					this._helpers.basePath() + "/bootstrap/queue.js");
 
+			yield copyFile(path.join(__dirname, '../src/templates/queue_server.tmpl'),
+					this._helpers.basePath() + "/queue_server.js");
+
 			this.success('Queue initialization success!');
 
 		} catch (e) {
