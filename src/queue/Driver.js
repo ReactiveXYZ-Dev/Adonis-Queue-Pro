@@ -41,7 +41,7 @@ class Queue {
 	/**
 	 * Dispatch a new job
 	 * @param  {App/Jobs} job Job instances
-	 * @return {KueJob}
+	 * @return {Void}
 	 */
 	dispatch(job, when = "now") {
 
@@ -68,8 +68,6 @@ class Queue {
 			this._queue.schedule(when, kueJob);
 		}
 
-		return job;
-
 	}
 
 	/**
@@ -95,7 +93,7 @@ class Queue {
 
 	/**
 	 * Clear all jobs within a queue for a clean start
-	 * @return {Promise}
+	 * @return {Promise<Response>}
 	 */
 	clear() {
 
