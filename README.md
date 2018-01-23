@@ -23,6 +23,7 @@ In your **config/app.js**, edit the following:
 - add `'adonis-queue-pro/providers/CommandProvider'` to your aceProviders array.
 - add `Queue: 'Adonis/Addon/Queue'` to your aliases array
 - add below commands to your commands array
+
 `'Adonis/Commands/Queue:Init'`
 
 	 `'Adonis/Commands/Queue:Generate'`
@@ -67,41 +68,41 @@ The argument defines the number of workers to run simultaneously. Default to 1 i
 **Notice**: This command only support a simple ``fork`` based process manager easy for local testing. It does not handle worker failure nor graceful restart. For production usage, you can use tools such as [Supervisor](https://github.com/Supervisor/supervisor) or [PM2](https://github.com/Unitech/pm2), and the command will be ``node queue_server.js`` in your app directory.
 
 ## Job API
-### Producer
+
 The producer job file supports Kue job properties which are defined as an ES6 ``get`` property in the class, see example by running `./ace queue:generate`.
 
 Refer to supported job properties above in the **Consumer/Producer Model** section.
 
-### Consumer
 The consumer job file supports Kue job's **concurrecy** defined as an ES6 `static get` property in the class, see example by running `./ace queue:generate`.
 
 The processing function is defined as a generator function `* handle()`  which can access constructor-injected payload using `this.data`.
 
-The consumer job class also supports job events, listed below:
+The producer job class also supports job events, listed below:
 ```js
+// with in producer class
 // job has been created and enqueued
 // useful for retrieving redis id for the job
-job.onInit(Kue/Job job)
+onInit(Kue/Job job)
 // See kue documentation
-job.onEnqueue(String jobType)
-job.onStart(String jobType)
-job.onPromotion(String jobType)
-job.onRemove(String jobType)
-job.onProgress(Float progress)
+onEnqueue(String jobType)
+onStart(String jobType)
+onPromotion(String jobType)
+onRemove(String jobType)
+onProgress(Float progress)
 // data returned/yielded from * handle() method
-job.onComplete(Object data)
+onComplete(Object data)
 // error caught in the * handle() method
-job.onFailed(Error error)
-job.onFailedAttempts(Error error)
+onFailed(Error error)
+onFailedAttempts(Error error)
 ```
-This consumer job class itself is an Event Listener, thus you can export the data received from the job event to the outside world. 
+This producer job class itself is an Event Listener, thus you can export the data received from the job event to the outside world. 
 
 A useful scenario is to remove job by id, which is retrievable from the `onInit` method: 
 
 ```js
-// within job consumer class
+// within job producer class
 onInit(job) {
-	this.emit('init', job.id);
+    this.emit('init', job.id);
 }
 // outside of the consumer
 // for queue.remove() see Queue API below
