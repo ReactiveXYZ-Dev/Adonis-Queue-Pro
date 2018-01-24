@@ -26,9 +26,9 @@ In your **config/app.js**, edit the following:
 
 `'Adonis/Commands/Queue:Init'`
 
-	 `'Adonis/Commands/Queue:Generate'`
+`'Adonis/Commands/Queue:Generate'`
 	 
-  `'Adonis/Commands/Queue:Work'`
+`'Adonis/Commands/Queue:Work'`
 
 ## Consumer/Producer model
 Instead of defining Job as a single entity, this library separates the responsibility of job into consumer and producer, here are the definitions:
