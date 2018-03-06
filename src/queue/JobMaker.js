@@ -142,73 +142,78 @@ class JobMaker {
 		let events = ['enqueue', 'start', 'promotion', 'progress', 
 					'failed attempts', 'failed', 'complete', 'remove'];
 
-		let bindListeners = (scheduledJob, alreadyScheduled) => {
-
-			// check job match
-			if (scheduledJob.data['_uuid'] != this.job.data['_uuid']) {
-				return;
-			}
-
-			if (this.job.constructor.type != scheduledJob.type) {
-				return;
-			}
-
-			// trigger the init action directly
-			// and pass in the scheduled job
-			if (!this.job.kueId && this.job.onInit && scheduledJob.id) {
-				this.job.onInit(scheduledJob);
-				if (this.job.unique) {
-					// save id for unique jobs since it will be reused
-					this.job.kueId = scheduledJob.id;
-				}
-			}
-
-			// add event listeners 
-			events.forEach(event => {
-				let tokens = event.split(' ').map(word => {
-					return word[0].toUpperCase() + word.slice(1);
-				});
-
-				// merge to capitalized case
-				const eventName = "on" + tokens.join("");
-				// check if the App job has registered the event listener
-				if (this.job[eventName]) {
-					if (alreadyScheduled) {
-						// if already scheduled event fired
-						// trigger respective event directly
-						if (event == 'failed' || event == 'failed attempts') {
-							this.job[eventName](scheduledJob._error);
-						} else if (event == 'enqueue' || event == 'start' || 
-									event == 'promotion' || event == 'remove') {
-							this.job[eventName](scheduledJob.type);
-						} else if (event == 'progress') {
-							this.job[eventName](scheduledJob.progress);
-						} else {
-							this.job[eventName](scheduledJob.result);
-						}
-					} else {
-						// bind event for schedule success
-						scheduledJob.on(event, (data, ...args) => {
-							this.job[eventName](data, args);
-						});
-					}
-				}
-			});
-		};
-
 		// register unique job listeners
 		if (this.job.unique) {
 			this.queue.on('already scheduled', scheduledJob => {
-			   bindListeners(scheduledJob, true);
+			   this._bindJobEventListeners(scheduledJob, true);
 			});
 		}
 
 		// for all jobs
 		this.queue.on("schedule success", scheduledJob => {
-			bindListeners(scheduledJob, false);
+			this._bindJobEventListeners(scheduledJob, false);
 		});
 
 		return this;
+
+	}
+
+	/**
+	 * Bind job-level event listeners
+	 * @param  {Kue/Job} scheduledJob     Kue job
+	 * @param  {Bool} alreadyScheduled
+	 * @return {Void}
+	 */
+	_bindJobEventListeners(scheduledJob, alreadyScheduled) {
+
+		// check job match
+		if (scheduledJob.data['_uuid'] != this.job.data['_uuid'] || 
+			this.job.constructor.type != scheduledJob.type) {
+			return;
+		}
+
+		// trigger the init action and pass in the scheduled job
+		// if a job is unique, then onInit is only triggered once
+		if (!this.job.kueId && this.job.onInit && scheduledJob.id) {
+			this.job.onInit(scheduledJob);
+			if (this.job.unique) {
+				// save id for unique jobs since it will be reused
+				this.job.kueId = scheduledJob.id;
+			}
+		}
+
+		// add event listeners 
+		events.forEach(event => {
+
+			let tokens = event.split(' ').map(word => {
+				return word[0].toUpperCase() + word.slice(1);
+			});
+
+			// merge to capitalized case
+			const eventName = "on" + tokens.join("");
+			// check if the App job has registered the event listener
+			if (this.job[eventName]) {
+				if (alreadyScheduled) {
+					// if already scheduled event fired
+					// trigger respective event directly
+					if (event == 'failed' || event == 'failed attempts') {
+						this.job[eventName](scheduledJob._error);
+					} else if (event == 'enqueue' || event == 'start' || 
+								event == 'promotion' || event == 'remove') {
+						this.job[eventName](scheduledJob.type);
+					} else if (event == 'progress') {
+						this.job[eventName](scheduledJob.progress);
+					} else {
+						this.job[eventName](scheduledJob.result);
+					}
+				} else {
+					// bind event for schedule success
+					scheduledJob.on(event, (...args) => {
+						this.job[eventName](args);
+					});
+				}
+			}
+		});
 
 	}
 	
