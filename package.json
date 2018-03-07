@@ -1,0 +1,38 @@
+{
+  "name": "adonis-queue-pro",
+  "version": "2.0.0",
+  "description": "An easy-to-use job queue for AdonisJS framework backed by Kue and Kue-scheduler",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ReactiveXYZ-Dev/Adonis-Queue-Pro.git"
+  },
+  "keywords": [
+    "adonis",
+    "queue",
+    "kue",
+    "job",
+    "worker"
+  ],
+  "author": "Jackie Zhang (ReactiveXYZ)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ReactiveXYZ-Dev/Adonis-Queue-Pro/issues"
+  },
+  "homepage": "https://github.com/ReactiveXYZ-Dev/Adonis-Queue-Pro#readme",
+  "dependencies": {
+    "@adonisjs/ace": "^5.0.1",
+    "@adonisjs/fold": "^4.0.7",
+    "fs-extra": "^5.0.0",
+    "kue": "^0.11.6",
+    "kue-scheduler": "^0.7.4",
+    "mkdirp": "^0.5.1",
+    "mustache": "^2.3.0",
+    "node-dir": "^0.1.17",
+    "randomstring": "^1.1.5"
+  },
+  "devDependencies": {}
+}
