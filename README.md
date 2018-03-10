@@ -153,7 +153,7 @@ Queue.clear()
 Contributions are welcomed ! This is an early start project so please send a pull request when you squashed a bug!
 
 ### Todos
-
+ - **4.0** integration
  - Write tests
  - Complete Kue API integration
  - Squash bugs
