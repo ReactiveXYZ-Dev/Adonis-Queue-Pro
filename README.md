@@ -14,7 +14,7 @@ Adonis queue pro is a queue-worker library for [AdonisJS](https://github.com/ado
 
 ## Installation
 	
-    npm install adonis-queue-pro
+    npm install --save adonis-queue-pro
 
 ## Configuration
 In your **config/app.js**, edit the following:
@@ -117,6 +117,8 @@ const Queue = use('Queue');
 ```
 ### Push job on to queue
 ```js
+// optionally inject data into the job class using constructor
+// and access it in the consumer handler using this.data
 const ExampleJob = use('App/Jobs/Producer/ExampleJob');
 Queue.dispatch(new ExampleJob({'data': 'whatever'}));
 ```
