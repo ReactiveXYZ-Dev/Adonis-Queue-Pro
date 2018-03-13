@@ -2,7 +2,7 @@
  * Utility functions
  *
  * @version 2.0.0
- * @adonis-version 4.0
+ * @adonis-version 4.0+
  */
 
 const fs = require('fs');

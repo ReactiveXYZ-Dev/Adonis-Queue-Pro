@@ -1,0 +1,21 @@
+'use strict'
+
+/*
+|--------------------------------------------------------------------------
+| Queue server
+|--------------------------------------------------------------------------
+|
+| This file bootstrap Adonisjs to start the Queue server. You are free to
+| customize the process of booting the http server.
+|
+| It is based on the standard AdonisJs Http server configuration, but removed
+| the HTTP server overload, leaving only a queue task processor
+*/
+
+const { Ignitor } = require('@adonisjs/ignitor')
+
+new Ignitor(require('@adonisjs/fold'))
+    .appRoot(__dirname)
+    .preload('start/queue')
+    .fire()
+    .catch(console.error)
