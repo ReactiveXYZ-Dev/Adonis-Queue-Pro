@@ -138,7 +138,6 @@ class JobMaker {
 	 * @return {this}
 	 */
 	assignEventListeners() {
-
 		let events = ['enqueue', 'start', 'promotion', 'progress', 
 					'failed attempts', 'failed', 'complete', 'remove'];
 
@@ -155,7 +154,6 @@ class JobMaker {
 		});
 
 		return this;
-
 	}
 
 	/**
@@ -165,7 +163,6 @@ class JobMaker {
 	 * @return {Void}
 	 */
 	_bindJobEventListeners(scheduledJob, alreadyScheduled) {
-
 		// check job match
 		if (scheduledJob.data['_uuid'] != this.job.data['_uuid'] || 
 			this.job.constructor.type != scheduledJob.type) {
@@ -184,7 +181,6 @@ class JobMaker {
 
 		// add event listeners 
 		events.forEach(event => {
-
 			let tokens = event.split(' ').map(word => {
 				return word[0].toUpperCase() + word.slice(1);
 			});
@@ -214,9 +210,7 @@ class JobMaker {
 				}
 			}
 		});
-
-	}
-	
+	}	
 }
 
 module.exports = JobMaker;
