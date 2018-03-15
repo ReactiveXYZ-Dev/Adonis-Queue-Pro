@@ -28,7 +28,7 @@ class WorkCommand extends BaseCommand {
         }
 
         if (!this.hasJobs()) {
-            this.error("No jobs to watch for. Please use queue:generate to create jobs!");
+            this.error("No jobs to watch for. Please use queue:job to create jobs!");
             return;
         }
 
