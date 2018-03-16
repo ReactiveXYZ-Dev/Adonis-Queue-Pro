@@ -17,11 +17,11 @@ const BaseCommand = require('./Base');
 
 class JobCommand extends BaseCommand {
 
-    get description() {
+    static get description() {
         return "Create a new job";
     }
 
-    get signature() {
+    static get signature() {
         return "queue:job {jobName:Name of job to process} {--jobId=@value}"
     }
 
@@ -75,4 +75,4 @@ class JobCommand extends BaseCommand {
 
 }
 
-module.exports = GenerateCommand;
+module.exports = JobCommand;

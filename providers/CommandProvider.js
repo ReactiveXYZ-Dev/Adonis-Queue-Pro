@@ -10,8 +10,8 @@ const { ServiceProvider } = require('@adonisjs/fold');
  */
 class CommandProvider extends ServiceProvider {
 
-    constructor() {
-        super()
+    constructor(Ioc) {
+        super(Ioc)
         // define types of commands
         // init: copy queue server boostrapper, sample configuration, and create default job path 
         // job: create a producer consumer job pair with name

@@ -1,13 +1,16 @@
-﻿# Adonis Queue Pro
+﻿# Adonis Queue Pro (Still in progress... DO NOT INSTALL)
 Adonis queue pro is a queue-worker library for [AdonisJS](https://github.com/adonisjs/adonis-framework), it is backed by [Kue](https://github.com/Automattic/kue) and [Kue-Scheduler](https://github.com/lykmapipo/kue-scheduler). 
 
-## Features
 
+**There have been a few breaking usage changes, please read the doc carefully!**
+
+
+## Features
   - Ace commands for generating jobs and start workers
   - (Close-to) Full kue/kue-scheduler API supported including future/repeat job scheduling
   - Multi-worker mode supported with full suite of AdonisJS API
   - Produce/Consumer model for structuring your job
-  - Easy and Elegant API for scheduling and processing your jobs
+  - Simple and Elegant API for scheduling and processing your jobs
 
 ## Notices
 This version only support **Adonis V4.0+**. For V3.2 support, please check the **v1** branch.
@@ -21,7 +24,7 @@ In your **star/app.js**, edit the following:
 
 - add `'adonis-queue-pro/providers/QueueProvider'` to your providers array.
 - add `'adonis-queue-pro/providers/CommandProvider'` to your aceProviders array.
-- add `Queue: 'Adonis/Addon/Queue'` to your aliases array
+- add `Queue: 'Adonis/Addons/Queue'` to your aliases array
 - add below commands to your commands array
 
 `'Adonis/Commands/Queue:Init'`
@@ -39,7 +42,7 @@ Instead of defining Job as a single entity, this library separates the responsib
 
 Example of a basic producer/consumer pair can be found by generating a sample job using the ``./ace queue:generate`` command.
 
-## CLi API
+## CLI API
 
 ### Initialize (Must be done first!)
 ```sh

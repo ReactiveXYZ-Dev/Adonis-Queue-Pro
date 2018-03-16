@@ -23,9 +23,12 @@
     "url": "https://github.com/ReactiveXYZ-Dev/Adonis-Queue-Pro/issues"
   },
   "homepage": "https://github.com/ReactiveXYZ-Dev/Adonis-Queue-Pro#readme",
+  "devDependencies": {
+    "@adonisjs/ace": "^4.0.5",
+    "@adonisjs/fold": "^4.0.2"
+  },
   "dependencies": {
-    "@adonisjs/ace": "^5.0.1",
-    "@adonisjs/fold": "^4.0.7",
+    "change-case": "^3.0.2",
     "fs-extra": "^5.0.0",
     "kue": "^0.11.6",
     "kue-scheduler": "^0.7.4",
@@ -33,6 +36,5 @@
     "mustache": "^2.3.0",
     "node-dir": "^0.1.17",
     "randomstring": "^1.1.5"
-  },
-  "devDependencies": {}
+  }
 }

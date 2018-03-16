@@ -1,6 +1,5 @@
 'use strict';
 
-const co = require('co');
 const dir = require('node-dir');
 
 /**
@@ -51,9 +50,8 @@ class JobRegister {
 	 * @return {Promise<String>} File paths
 	 */
 	_jobFilePaths() {
-		return dir.promiseFiles(this._config.get('queue.consumerPath') ? 
-				this._config.get('queue.consumerPath') : this._helpers.appPath() + 'Jobs/Consumers'
-			);
+		let consumerPath = this._config.get('queue.consumerPath');
+		return dir.promiseFiles(consumerPath ? consumerPath : this._helpers.appRoot() + '/app/Jobs/Consumers');
 	}
 
 	/**

@@ -16,7 +16,7 @@ class QueueProvider extends ServiceProvider {
 	 * Register a Queue instance
 	 */
     register() {
-        this.app.singleton('Adonis/Addon/Queue', app => {
+        this.app.singleton('Adonis/Addons/Queue', app => {
             return new Queue(app);
         });
     }

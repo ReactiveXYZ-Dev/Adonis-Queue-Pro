@@ -12,11 +12,11 @@ const BaseCommand = require('./Base');
 
 class WorkCommand extends BaseCommand {
 
-    get description() {
+    static get description() {
         return "Start one or more workers";
     }
 
-    get signature() {
+    static get signature() {
         return "queue:work {numWorkers?:Number of workers to start with default of 1}"
     }
 
@@ -35,7 +35,7 @@ class WorkCommand extends BaseCommand {
         numWorkers = numWorkers ? parseInt(numWorkers) : 1;
 
         for (let i = 1; i <= numWorkers; ++i) {
-            const worker = fork(this._helpers.basePath() + "/queue_server.js", [], {
+            const worker = fork(this._helpers.appRoot() + "/queue_server.js", [], {
                 silent: true
             });
             worker.stdout.on('data', message => {

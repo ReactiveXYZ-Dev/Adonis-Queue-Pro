@@ -2,7 +2,7 @@
 
 const kue = require('kue-scheduler');
 const JobMaker = require('./JobMaker');
-const JobRegister = requrie('./JobRegister');
+const JobRegister = require('./JobRegister');
 
 /**
  * Main queue driver
@@ -33,7 +33,7 @@ class Queue {
 	 * Register job event handlers
 	 * @return {Promise}
 	 */
-	listen() {
+	processing() {
 		const register = new JobRegister(this._config, this._helpers);
 		return register.setQueue(this._queue).listenForAppJobs();
 	}

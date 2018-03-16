@@ -2,8 +2,8 @@
 
 const fs = require('fs');
 const path = require('path')
+const BaseCommand = require('./Base');
 const { copyFile } = require('../src/utils');
-const BaseCommand = require('./BaseCommand');
 
 /**
  * Initialize all necessary boilerplates for the queue
@@ -13,11 +13,11 @@ const BaseCommand = require('./BaseCommand');
  */
 class InitCommand extends BaseCommand {
 
-    get description() {
+    static get description() {
         return "Initialize queue requirements";
     }
 
-    get signature() {
+    static get signature() {
         return "queue:init";
     }
 
@@ -25,13 +25,13 @@ class InitCommand extends BaseCommand {
         // copy over sample configs and server files to respective directory
         try {
             await copyFile(path.join(__dirname, '../src/templates/config.tmpl'),
-                this._helpers.basePath() + "/config/queue.js");
+                this._helpers.appRoot() + "/config/queue.js");
 
             await copyFile(path.join(__dirname, '../src/templates/queue.tmpl'),
-                this._helpers.basePath() + "/start/queue.js");
+                this._helpers.appRoot() + "/start/queue.js");
 
             await copyFile(path.join(__dirname, '../src/templates/queue_server.tmpl'),
-                this._helpers.basePath() + "/queue_server.js");
+                this._helpers.appRoot() + "/queue_server.js");
 
             this.success('Queue initialized successfully!');
 
@@ -43,3 +43,5 @@ class InitCommand extends BaseCommand {
     }
 
 }
+
+module.exports = InitCommand;
