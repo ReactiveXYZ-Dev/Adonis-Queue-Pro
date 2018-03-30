@@ -50,7 +50,7 @@ $ ./ace queue:init
 ```
 This will create the queue configuration file and placed in the **config** directory, which is very similar to [kue-scheduler](https://github.com/lykmapipo/kue-scheduler)'s config file.
 
-This will also create the queue server adaptor in the **bootstrap** and **APP_PATH** directory, which will be the entry point for the queue worker process.
+This will also create the queue server adaptor in the **start** and root directory, which will be the entry point for the queue worker process.
 
 ### Create job
 ```sh
