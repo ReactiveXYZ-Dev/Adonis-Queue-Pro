@@ -16,7 +16,9 @@ class BaseError extends Error {
 }
 
 class JobDirectoryNotFoundException extends BaseError {}
+class JobProcessError extends BaseError {}
 
 module.exports = {
-    JobDirectoryNotFoundException
+    JobDirectoryNotFoundException,
+    JobProcessError
 }

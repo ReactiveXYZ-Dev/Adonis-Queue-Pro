@@ -1,7 +1,7 @@
 'use strict';
 
 const dir = require('node-dir');
-const { JobDirectoryNotFoundException } = require('../exceptions');
+const { JobDirectoryNotFoundException, JobProcessError } = require('../errors');
 
 /**
  * Register and preload consumer processes
@@ -77,21 +77,15 @@ class JobRegister {
 					// check if the function is async
 					if (res instanceof Promise) {
 						res.then(
-							success => {
-								done(null, {
-									'res': success
-								});
-							},
+							success => done(null, { 'res': success }),
 							error => done(error)
 						);
 					} else {
 						// just a regular call that returns bool
 						if (!res) {
-							done(new Error(`Failed to process job ${Job.name}!`))
+							done(new JobProcessError(`Failed to process job ${Job.name}!`))
 						} else {
-							done(null, {
-								'res': res
-							});
+							done(null, { 'res': res });
 						}
 					}
    			});

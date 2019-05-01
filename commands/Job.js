@@ -1,10 +1,8 @@
 'use strict'
 
-const fs = require('fs');
-const util = require('util');
 const path = require('path');
 const mustache = require('mustache');
-const { copyFile, readFile, writeFile, dirExistsSync, createDir } = require('../src/utils');
+const { readFile, writeFile, dirExistsSync, createDir } = require('../src/utils');
 const { paramCase } = require('change-case');
 const BaseCommand = require('./Base');
 

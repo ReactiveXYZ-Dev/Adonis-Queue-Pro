@@ -78,7 +78,7 @@ Refer to supported job properties above in the **Consumer/Producer Model** secti
 
 The consumer job file supports Kue job's **concurrecy** defined as an ES6 `static get` property in the class, see example by running `./ace queue:job`.
 
-The processing function is defined as a generator function `* handle()`  which can access constructor-injected payload using `this.data`.
+The processing function is defined as an async function `async handle()`  which can access constructor-injected payload using `this.data`.
 
 The producer job class also supports job events, listed below:
 ```js
