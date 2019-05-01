@@ -11,5 +11,8 @@ const Queue = use('Queue');
 
 Queue.processing().then(
     success => { console.log(success.message) },
-    error => { console.log(error.message) }
+    error => { 
+        console.error(error.message);
+        process.exit(1);
+    }
 );

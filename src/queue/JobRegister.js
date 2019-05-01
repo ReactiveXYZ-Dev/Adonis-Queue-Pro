@@ -1,6 +1,7 @@
 'use strict';
 
 const dir = require('node-dir');
+const { JobDirectoryNotFoundException } = require('../exceptions');
 
 /**
  * Register and preload consumer processes
@@ -41,7 +42,8 @@ class JobRegister {
 				   			message: "Preprocessed jobs and started queue listener!"
 				   		});
 				   }, error => { 
-				   		return Promise.reject(error);
+					   	const e = new JobDirectoryNotFoundException("Consumer/Producer directory not found. Please make sure to create job with ./ace queue:job")
+				   		return Promise.reject(e.setError(error));
 				   });
 	}
 

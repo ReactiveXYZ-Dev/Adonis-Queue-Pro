@@ -2,7 +2,7 @@
 Adonis queue pro is a queue-worker library for [AdonisJS](https://github.com/adonisjs/adonis-framework), it is backed by [Kue](https://github.com/Automattic/kue) and [Kue-Scheduler](https://github.com/lykmapipo/kue-scheduler). 
 
 
-**There have been a few breaking usage changes, please read the doc carefully!**
+**There have been a few breaking usage changes since v1, please read the doc carefully!**
 
 
 ## Features

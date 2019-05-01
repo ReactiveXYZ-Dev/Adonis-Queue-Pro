@@ -24,14 +24,14 @@
   },
   "homepage": "https://github.com/ReactiveXYZ-Dev/Adonis-Queue-Pro#readme",
   "devDependencies": {
-    "@adonisjs/ace": "^4.0.5",
-    "@adonisjs/fold": "^4.0.2"
+    "@adonisjs/ace": "^5.0.8",
+    "@adonisjs/fold": "^4.0.9"
   },
   "dependencies": {
     "change-case": "^3.0.2",
     "fs-extra": "^5.0.0",
     "kue": "^0.11.6",
-    "kue-scheduler": "^0.7.4",
+    "kue-scheduler": "^0.8.3",
     "mkdirp": "^0.5.1",
     "mustache": "^2.3.0",
     "node-dir": "^0.1.17",
