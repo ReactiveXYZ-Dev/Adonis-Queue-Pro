@@ -138,8 +138,6 @@ class JobMaker {
 	 * @return {this}
 	 */
 	assignEventListeners() {
-		let events = ['enqueue', 'start', 'promotion', 'progress', 
-					'failed attempts', 'failed', 'complete', 'remove'];
 
 		// register unique job listeners
 		if (this.job.unique) {
@@ -180,6 +178,11 @@ class JobMaker {
 		}
 
 		// add event listeners 
+		let events = [
+			'enqueue', 'start', 'promotion', 'progress',
+			'failed attempts', 'failed', 'complete', 'remove'
+		];
+		
 		events.forEach(event => {
 			let tokens = event.split(' ').map(word => {
 				return word[0].toUpperCase() + word.slice(1);
@@ -190,8 +193,7 @@ class JobMaker {
 			// check if the App job has registered the event listener
 			if (this.job[eventName]) {
 				if (alreadyScheduled) {
-					// if already scheduled event fired
-					// trigger respective event directly
+					// if already scheduled event fired, trigger respective event directly
 					if (event == 'failed' || event == 'failed attempts') {
 						this.job[eventName](scheduledJob._error);
 					} else if (event == 'enqueue' || event == 'start' || 
