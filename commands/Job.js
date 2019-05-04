@@ -2,7 +2,7 @@
 
 const path = require('path');
 const mustache = require('mustache');
-const { readFile, writeFile, dirExistsSync, createDir } = require('../src/utils');
+const { readFile, writeFile, dirExistsSync, createDir, deleteFile } = require('../src/utils');
 const { paramCase } = require('change-case');
 const BaseCommand = require('./Base');
 
@@ -20,11 +20,10 @@ class JobCommand extends BaseCommand {
     }
 
     static get signature() {
-        return "queue:job {jobName:Name of job to process} {--jobId=@value}"
+        return "queue:job {jobName:Name of job to process} {--jobId=@value} {--remove:remove this job}"
     }
 
-    async handle({ jobName }, { jobId }) {
-
+    async handle({ jobName }, { jobId, remove }) {
         if (!this.hasInitialized()) {
             this.error("Please run queue:init before creating job!");
             return;
@@ -56,11 +55,18 @@ class JobCommand extends BaseCommand {
             if (!dirExistsSync(producerPath)) {
                 await createDir(producerPath);
             }
+            
+            if (remove) {
+                await deleteFile(`${consumerPath}/${jobName}.js`);
+                await deleteFile(`${producerPath}/${jobName}.js`);
 
-            await writeFile(`${consumerPath}/${jobName}.js`, consumerTask);
-            await writeFile(`${producerPath}/${jobName}.js`, producerTask);
+                this.success("Job has been removed");
+            } else {
+                await writeFile(`${consumerPath}/${jobName}.js`, consumerTask);
+                await writeFile(`${producerPath}/${jobName}.js`, producerTask);
 
-            this.success("Job has been created");
+                this.success("Job has been created");
+            }
 
         } catch (e) {
             console.error(e);

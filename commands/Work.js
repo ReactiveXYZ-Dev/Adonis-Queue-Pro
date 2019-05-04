@@ -38,11 +38,12 @@ class WorkCommand extends BaseCommand {
             const worker = fork(this._helpers.appRoot() + "/queue_server.js", [], {
                 silent: true
             });
+            console.log(`Started worker ${i}`);
             worker.stdout.on('data', message => {
-                console.log(`Stdout worker ${i}: ` + message.toString('utf8'));
+                console.log(`Stdout from worker ${i}: ` + message.toString('utf8'));
             });
             worker.stderr.on('data', message => {
-                console.error(`Stderr worker ${i}: ` + message.toString('utf8'));
+                console.error(`Stderr from worker ${i}: ` + message.toString('utf8'));
             });
         }
 

@@ -1,12 +1,11 @@
-﻿# Adonis Queue Pro (Still in progress... DO NOT INSTALL)
-Adonis queue pro is a queue-worker library for [AdonisJS](https://github.com/adonisjs/adonis-framework), it is backed by [Kue](https://github.com/Automattic/kue) and [Kue-Scheduler](https://github.com/lykmapipo/kue-scheduler). 
+﻿# Adonis Queue Pro
+Adonis queue pro is a worker-based queue library for [AdonisJS](https://github.com/adonisjs/adonis-framework), it is backed by [Kue](https://github.com/Automattic/kue) and [Kue-Scheduler](https://github.com/lykmapipo/kue-scheduler). 
 
-
-**There have been a few breaking usage changes since v1, please read the doc carefully!**
-
+**There have been a few breaking API changes since v1 (supporting adonis v3.2), please read the doc carefully!**
 
 ## Features
   - Ace commands for generating jobs and start workers
+  - Use your existing adonis modules in your queue processor
   - (Close-to) Full kue/kue-scheduler API supported including future/repeat job scheduling
   - Multi-worker mode supported with full suite of AdonisJS API
   - Produce/Consumer model for structuring your job
@@ -24,7 +23,7 @@ In your **star/app.js**, edit the following:
 
 - add `'adonis-queue-pro/providers/QueueProvider'` to your providers array.
 - add `'adonis-queue-pro/providers/CommandProvider'` to your aceProviders array.
-- add `Queue: 'Adonis/Addons/Queue'` to your aliases array
+- add `Queue: 'Adonis/Addons/Queue'` to your aliases object
 - add below commands to your commands array
 
 `'Adonis/Commands/Queue:Init'`
@@ -52,7 +51,12 @@ This will create the queue configuration file and placed in the **config** direc
 
 This will also create the queue server adaptor in the **start** and root directory, which will be the entry point for the queue worker process.
 
-### Create job
+### Manage jobs
+
+#### Create a job
+
+You can create a new job by running:
+
 ```sh
 $ ./ace queue:job SendEmail --jobId='send-email'
 ```
@@ -62,13 +66,21 @@ This command will create job producers and consumers in directory configurable i
 
 The job consumers and producers will both run in Adonis framework context, thus you can easily use any supported libraries within the job file. 
 
+#### Remove a job
+
+Similarly, you can remove an existing job by running:
+
+```sh
+$ ./ace queue:job SendEmail --remove
+```
+
 ### Run worker
 ```sh
 $ ./ace queue:work 4
 ```
 The argument defines the number of workers to run simultaneously. Default to 1 if not provided. 
 
-**Notice**: This command only support a simple ``fork`` based process manager easy for local testing. It does not handle worker failure nor graceful restart. For production usage, you can use tools such as [Supervisor](https://github.com/Supervisor/supervisor) or [PM2](https://github.com/Unitech/pm2), and the command will be ``node queue_server.js`` in your app directory.
+**Notice**: This command only support a simple ``fork`` based process manager which is easy for local testing. It does not handle worker failure nor graceful restart. For production usage, you can use tools such as [Supervisor](https://github.com/Supervisor/supervisor) or [PM2](https://github.com/Unitech/pm2), and the command will be ``node queue_server.js`` in your app directory.
 
 ## Job API
 
@@ -78,7 +90,7 @@ Refer to supported job properties above in the **Consumer/Producer Model** secti
 
 The consumer job file supports Kue job's **concurrecy** defined as an ES6 `static get` property in the class, see example by running `./ace queue:job`.
 
-The processing function is defined as an async function `async handle()`  which can access constructor-injected payload using `this.data`.
+The processing function is defined as an async function `async handle()` or `handle()` depending on whether your task is asynchronous. Within the task class, you can access constructor-injected payload with `this.data`.
 
 The producer job class also supports job events, listed below:
 ```js
@@ -118,7 +130,7 @@ job.on('init', id => Queue.remove(id));
 ```js
 const Queue = use('Queue');
 ```
-### Push job on to queue
+### Push job onto the queue
 ```js
 // optionally inject data into the job class using constructor
 // and access it in the consumer handler using this.data
@@ -136,21 +148,30 @@ Queue.dispatch(new ExampleJob, 'every 2 seconds');
 Queue.dispatch(new ExampleJob, '2 seconds from now');
 ```
 ### Remove jobs
-Remove a single job by id
+
+Remove a single job by id:
+
 ```js
 // asynchronous removal...
 Queue.remove(id).then(response => {}, error => {});
 ```
 
-Clear all jobs
+Clear all jobs:
+
 ```js
 // also returns a promise
 Queue.clear().then(response => {}, error => {});
 ```
 
+### Run tests
+
+After you run `queue:init`, we will generate a test file in the tests directory at *{appRoot}/test*. Then you can follow the instructions [here](https://adonisjs.com/docs/4.1/testing) to run the test. 
+
+If you don't like it, feel free to remove it.
+
 ## Development
 
-Contributions are welcomed ! This is an early start project so please send a pull request when you squashed a bug!
+Contributions are welcome! This is a community project so please send a pull request whenever you feel like to!
 
 ### Todos
  - Write tests

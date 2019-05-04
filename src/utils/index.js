@@ -87,6 +87,24 @@ module.exports = {
 
         });
 
+    },
+
+    deleteFile: src => {
+        
+        return new Promise((resolve, reject) => {
+
+            fs.unlink(src, err => {
+                
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve();
+                }
+
+            });
+
+        });
+
     }
 
 };

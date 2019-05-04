@@ -72,21 +72,28 @@ class JobRegister {
 				(job, ctx, done) => {
 					// recreate the job and apply the handle function
    					let appJob = new Job(job.data);
-					let res = appJob.handle.apply(appJob);
+					try {
+						let res = appJob.handle.apply(appJob);
 
-					// check if the function is async
-					if (res instanceof Promise) {
-						res.then(
-							success => done(null, { 'res': success }),
-							error => done(error)
-						);
-					} else {
-						// just a regular call that returns bool
-						if (!res) {
-							done(new JobProcessError(`Failed to process job ${Job.name}!`))
+						if (res instanceof Promise) {
+							res.then(
+								success => done(null, {
+									'res': success
+								}),
+								error => {
+									let e = new JobProcessError(`Failed to process job ${Job.name}!`);
+									done(e.setError(error));
+								}
+							);
 						} else {
-							done(null, { 'res': res });
+							// just a regular call
+							done(null, {
+								'res': res
+							});
 						}
+					} catch (error) {
+						let e = new JobProcessError(`Failed to process job ${Job.name}!`);
+						done(e.setError(error));
 					}
    			});
    		});

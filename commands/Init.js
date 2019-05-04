@@ -1,6 +1,5 @@
 'use strict'
 
-const fs = require('fs');
 const path = require('path')
 const BaseCommand = require('./Base');
 const { copyFile, dirExistsSync, createDir } = require('../src/utils');
@@ -14,7 +13,7 @@ const { copyFile, dirExistsSync, createDir } = require('../src/utils');
 class InitCommand extends BaseCommand {
 
     static get description() {
-        return "Initialize queue requirements";
+        return "Initialize queue configuration";
     }
 
     static get signature() {
@@ -25,13 +24,14 @@ class InitCommand extends BaseCommand {
         
         try {
             // copy over sample configs and server files to respective directory
-            await copyFile(path.join(__dirname, '../src/templates/config.tmpl'),
+            const tmplPath = path.join(__dirname, '../src/templates');
+            await copyFile(path.join(tmplPath, 'config.tmpl'),
                 this._helpers.appRoot() + "/config/queue.js");
 
-            await copyFile(path.join(__dirname, '../src/templates/queue.tmpl'),
+            await copyFile(path.join(tmplPath, 'queue.tmpl'),
                 this._helpers.appRoot() + "/start/queue.js");
 
-            await copyFile(path.join(__dirname, '../src/templates/queue_server.tmpl'),
+            await copyFile(path.join(tmplPath, 'queue_server.tmpl'),
                 this._helpers.appRoot() + "/queue_server.js");
 
             // copy over test files
