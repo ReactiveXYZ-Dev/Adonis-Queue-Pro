@@ -165,16 +165,15 @@ Queue.clear().then(response => {}, error => {});
 
 ### Run tests
 
-After you run `queue:init`, we will generate a test file in the tests directory at *{appRoot}/test*. Then you can follow the instructions [here](https://adonisjs.com/docs/4.1/testing) to run the test. 
+Please clone [the Adonis test app repo](https://github.com/ReactiveXYZ-Dev/adonis-queue-pro-test), install the dependencies, and run ``adonis test`` to run the spec tests.
 
-If you don't like it, feel free to remove it.
+You can also contribute to the test repo by submitting issues and PRs.
 
 ## Development
 
 Contributions are welcome! This is a community project so please send a pull request whenever you feel like to!
 
 ### Todos
- - Write tests
  - Complete Kue API integration
  - Squash bugs
 

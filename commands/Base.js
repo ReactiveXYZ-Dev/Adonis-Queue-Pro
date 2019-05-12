@@ -57,10 +57,10 @@ class BaseCommand extends Command {
         }
 
         let files = dir.files(consumerPath, { sync: true });
-        if (files.length == 0) return false;
+        if (!files || files.length == 0) return false;
 
         files = dir.files(producerPath, { sync: true });
-        if (files.length == 0) return false;
+        if (!files || files.length == 0) return false;
 
         return true;
     }

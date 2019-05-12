@@ -2,7 +2,7 @@
 
 const path = require('path')
 const BaseCommand = require('./Base');
-const { copyFile, dirExistsSync, createDir } = require('../src/utils');
+const { copyFile } = require('../src/utils');
 
 /**
  * Initialize all necessary boilerplates for the queue
@@ -33,16 +33,6 @@ class InitCommand extends BaseCommand {
 
             await copyFile(path.join(tmplPath, 'queue_server.tmpl'),
                 this._helpers.appRoot() + "/queue_server.js");
-
-            // copy over test files
-            const testPath = this._helpers.appRoot() + '/test';
-            if (!dirExistsSync(testPath)) {
-                await createDir(testPath);
-            }
-
-            await copyFile(
-                path.join(__dirname, '../src/templates/test/adonis-queue-pro-tests.tmpl'), 
-                testPath + '/adonis-queue-pro-tests.js');
 
             this.success('Queue initialized successfully!');
 
