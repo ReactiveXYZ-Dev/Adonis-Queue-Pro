@@ -70,7 +70,7 @@ class Queue {
 
 	/**
 	 * Remove a job from queue
-	 * @param  {Mixed} job job_id/instance/criteria
+	 * @param  {String|Object} job job id or job criteria
 	 * @return {Promise<Response>}
 	 */
 	remove(job) {

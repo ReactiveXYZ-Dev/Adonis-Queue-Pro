@@ -59,7 +59,7 @@ class JobMaker {
 	 */
 	initialize() {
 		// generate an UUID for this job along with its type
-		this.job.data['_uuid'] = this.job.constructor.type + randomString.generate(8);
+		this.job.data['__unique_id__'] = this.job.constructor.type + randomString.generate(8);
 		this.kueJob = this.queue.createJob(
 			this.job.constructor.type, 
 			this.job.data
@@ -128,7 +128,7 @@ class JobMaker {
 	 */
 	assignUnique() {
 		if (this.job.unique) {
-			this.kueJob.unique(this.job.data['_uuid']);
+			this.kueJob.unique(this.job.data['__unique_id__']);
 		}
 		return this;
 	}
@@ -162,7 +162,7 @@ class JobMaker {
 	 */
 	_bindJobEventListeners(scheduledJob, alreadyScheduled) {
 		// check job match
-		if (scheduledJob.data['_uuid'] != this.job.data['_uuid'] || 
+		if (scheduledJob.data['__unique_id__'] != this.job.data['__unique_id__'] || 
 			this.job.constructor.type != scheduledJob.type) {
 			return;
 		}
