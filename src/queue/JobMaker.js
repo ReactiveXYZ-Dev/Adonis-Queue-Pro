@@ -207,7 +207,7 @@ class JobMaker {
 				} else {
 					// bind event for schedule success
 					scheduledJob.on(event, (...args) => {
-						this.job[eventName](args);
+						this.job[eventName](...args);
 					});
 				}
 			}

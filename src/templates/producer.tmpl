@@ -66,7 +66,7 @@ class {{ jobName }} extends EventEmitter {
     onInit(job) {
         console.log("Inited Job ID " + job.id);
 
-        this.emit('init', job.id); // return the id of the kue job 
+        this.emit('init', job.id); // emit the id of the kue job 
     }
 
     /**
@@ -77,16 +77,18 @@ class {{ jobName }} extends EventEmitter {
     onComplete(data) {
         console.log("Completed!");
 
-        this.emit('complete', data); // return the completion data
+        this.emit('complete', data); // emit the completion data
     }
 
     /**
      * Failed event
-     * @param  {Error} e Error created from the consumer's handle() method
+     * @param  {String} e Error message
      * @return {Void}
      */
-    onFail(e) {
-        console.log(e.message);
+    onFailed(e) {
+        console.log(e);
+
+        this.emit('failed', e); // emit the error
     }
 
 }

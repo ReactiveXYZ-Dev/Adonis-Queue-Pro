@@ -7,7 +7,7 @@ Adonis queue pro is a worker-based queue library for [AdonisJS](https://github.c
   - Ace commands for generating jobs and start workers
   - Use your existing adonis modules in your queue processor
   - (Close-to) Full kue/kue-scheduler API supported including future/repeat job scheduling
-  - Multi-worker mode supported with full suite of AdonisJS API
+  - Multi-worker mode supported
   - Produce/Consumer model for structuring your job
   - Simple and Elegant API for scheduling and processing your jobs
 
@@ -165,7 +165,7 @@ Queue.clear().then(response => {}, error => {});
 
 ### Run tests
 
-Please clone [the Adonis test app repo](https://github.com/ReactiveXYZ-Dev/adonis-queue-pro-test), install the dependencies, and run ``adonis test`` to run the spec tests.
+Please clone [the Adonis test app repo](https://github.com/ReactiveXYZ-Dev/adonis-queue-pro-test), install the dependencies, and run ``adonis test`` to run the spec tests. (Make sure redis is installed and configured properly as required by Kue).
 
 You can also contribute to the test repo by submitting issues and PRs.
 

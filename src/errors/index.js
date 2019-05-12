@@ -13,12 +13,23 @@ class BaseError extends Error {
         this.error = error;
         return this;
     }
+
+    getError() {
+        return this.error;
+    }
+
+    updateMessage() {
+        let message = this.message;
+        if (this.error) message += ` (src err: ${this.error.message})`;
+        this.message = message;
+        return this;
+    }
 }
 
-class JobDirectoryNotFoundException extends BaseError {}
+class JobDirectoryNotFoundError extends BaseError {}
 class JobProcessError extends BaseError {}
 
 module.exports = {
-    JobDirectoryNotFoundException,
+    JobDirectoryNotFoundError,
     JobProcessError
 }

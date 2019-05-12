@@ -1,7 +1,7 @@
 'use strict';
 
 const dir = require('node-dir');
-const { JobDirectoryNotFoundException, JobProcessError } = require('../errors');
+const { JobDirectoryNotFoundError, JobProcessError } = require('../errors');
 
 /**
  * Register and preload consumer processes
@@ -42,7 +42,7 @@ class JobRegister {
 				   			message: "Preprocessed jobs and started queue listener!"
 				   		});
 				   }, error => { 
-					   	const e = new JobDirectoryNotFoundException("Consumer/Producer directory not found. Please make sure to create job with ./ace queue:job")
+					   	const e = new JobDirectoryNotFoundError("Consumer/Producer directory not found. Please make sure to create job with ./ace queue:job")
 				   		return Promise.reject(e.setError(error));
 				   });
 	}
@@ -64,7 +64,7 @@ class JobRegister {
 	_requireAndProcessJobs(filePaths) {
 		filePaths.forEach(path => {
 			let Job = require(path);
-			const concurrency = Job.concurrency ? Job.concurrency : 1;
+			const concurrency = Job.concurrency || 1;
 			
 			this.queue.process(
 				Job.type, 
@@ -74,26 +74,21 @@ class JobRegister {
    					let appJob = new Job(job.data);
 					try {
 						let res = appJob.handle.apply(appJob);
-
 						if (res instanceof Promise) {
 							res.then(
-								success => done(null, {
-									'res': success
-								}),
+								success => done(null, success),
 								error => {
 									let e = new JobProcessError(`Failed to process job ${Job.name}!`);
-									done(e.setError(error));
+									done(e.setError(error).updateMessage());
 								}
 							);
 						} else {
 							// just a regular call
-							done(null, {
-								'res': res
-							});
+							done(null, res);
 						}
 					} catch (error) {
 						let e = new JobProcessError(`Failed to process job ${Job.name}!`);
-						done(e.setError(error));
+						done(e.setError(error).updateMessage());
 					}
    			});
    		});
