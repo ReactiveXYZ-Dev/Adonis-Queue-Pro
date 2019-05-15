@@ -26,7 +26,6 @@ class Queue {
 		this._queue = kue.createQueue(this._config.get('queue.connection'));
 		// boost number of event listeners a queue instance can listen to
 		this._queue.setMaxListeners(0);
-
 	}	
 
 	/**
@@ -46,7 +45,7 @@ class Queue {
 	 */
 	dispatch(job, when = "now") {
 		// create a job maker factory
-		let maker = new JobMaker;
+		const maker = new JobMaker;
 
 		// get the kue job converted from app job
 		const kueJob = maker.setAppJob(job)

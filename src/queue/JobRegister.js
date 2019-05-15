@@ -52,7 +52,7 @@ class JobRegister {
 	 * @return {Promise<String>} File paths
 	 */
 	_jobFilePaths() {
-		let consumerPath = this._config.get('queue.consumerPath');
+		const consumerPath = this._config.get('queue.consumerPath');
 		return dir.promiseFiles(consumerPath ? consumerPath : this._helpers.appRoot() + '/app/Jobs/Consumers');
 	}
 
@@ -63,7 +63,12 @@ class JobRegister {
 	 */
 	_requireAndProcessJobs(filePaths) {
 		filePaths.forEach(path => {
-			let Job = require(path);
+			// disable getting index job
+			if (path.includes('index')) {
+				return;
+			}
+
+			const Job = require(path);
 			const concurrency = Job.concurrency || 1;
 			
 			this.queue.process(
@@ -71,14 +76,15 @@ class JobRegister {
 				concurrency, 
 				(job, ctx, done) => {
 					// recreate the job and apply the handle function
-   					let appJob = new Job(job.data);
+					const appJob = new Job(job.data);
+					appJob.setContext(ctx);
 					try {
-						let res = appJob.handle.apply(appJob);
+						const res = appJob.handle.apply(appJob);
 						if (res instanceof Promise) {
 							res.then(
 								success => done(null, success),
 								error => {
-									let e = new JobProcessError(`Failed to process job ${Job.name}!`);
+									const e = new JobProcessError(`Failed to process job ${Job.name}!`);
 									done(e.setError(error).updateMessage());
 								}
 							);
@@ -87,7 +93,7 @@ class JobRegister {
 							done(null, res);
 						}
 					} catch (error) {
-						let e = new JobProcessError(`Failed to process job ${Job.name}!`);
+						const e = new JobProcessError(`Failed to process job ${Job.name}!`);
 						done(e.setError(error).updateMessage());
 					}
    			});

@@ -28,8 +28,10 @@ class BaseError extends Error {
 
 class JobDirectoryNotFoundError extends BaseError {}
 class JobProcessError extends BaseError {}
+class JobFetchError extends BaseError {}
 
 module.exports = {
     JobDirectoryNotFoundError,
-    JobProcessError
+    JobProcessError,
+    JobFetchError
 }
