@@ -130,7 +130,7 @@ class JobMaker {
 	 */
 	assignUnique() {
 		if (this._job.unique) {
-			this._kueJob.unique(this._job.data['__unique_id__']);
+			this._kueJob.unique(this._job.constructor.type);
 		}
 		return this;
 	}
@@ -142,25 +142,31 @@ class JobMaker {
 	assignEventListeners() {
 		let events = [
 		  'enqueue', 'start', 'promotion', 'progress',
-		  'failed attempts', 'failed', 'complete', 'remove'
+		  'failed attempts', 'failed', 'complete'
 		];
 		events.forEach(event => {
 			this._queue.on(`job ${event}`, (id, ...args) => {
-				kue.Job.get(id, (err, job) => {
+				kue.Job.get(id, (err, kueJob) => {
 					if (!err) {
-						if (job.data['__unique_id__'] === this._job.data['__unique_id__']) {
+						if (kueJob.data['__unique_id__'] === this._job.data['__unique_id__']) {
 						  const eventName = "on" + event.split(' ').map(word => {
 						    return word[0].toUpperCase() + word.slice(1);
 						  }).join('');
+						  
 						  if (event === 'enqueue') {
-						    this._job.onInit(job);
+							this._job.onInit(kueJob);
+							// save kue job to job when enqueued
+							this._job._kueJob = kueJob;
 						  }
 						  if (this._job[eventName]) {
 						    this._job[eventName](...args);
 						  }
 						} 
 					} else if (this._job['onFailed']) {
-					  this._job.onFailed(new JobFetchError(`Failed to fetch job id ${id}, event ${event}`).setError(err).updateMessage());
+					  	this._job.onFailed(
+						  new JobFetchError(`Failed to fetch job id ${id}, event ${event}`)
+						  		.setError(err).updateMessage()
+						);
 					}
 					
 				});

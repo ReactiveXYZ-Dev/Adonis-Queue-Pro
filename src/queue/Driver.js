@@ -69,15 +69,19 @@ class Queue {
 
 	/**
 	 * Remove a job from queue
-	 * @param  {String|Object} job job id or job criteria
+	 * @param  {App/Job} job Job producer
 	 * @return {Promise<Response>}
 	 */
 	remove(job) {
 		return new Promise((resolve, reject) => {
-			this._queue.remove(job, (error, response) => {
+			this._queue.remove(job._kueJob.id, (error, response) => {
 				if (error) {
 					reject(error);
 				} else {
+					// send the onRemove event
+					if (job['onRemove']) {
+						job['onRemove'](job.type);
+					}
 					resolve(response);
 				}
 			});

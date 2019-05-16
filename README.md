@@ -1,7 +1,7 @@
 ﻿# Adonis Queue Pro
 Adonis queue pro is a worker-based queue library for [AdonisJS](https://github.com/adonisjs/adonis-framework), it is backed by [Kue](https://github.com/Automattic/kue) and [Kue-Scheduler](https://github.com/lykmapipo/kue-scheduler). 
 
-**There have been a few breaking API changes since v1 (supporting adonis v3.2), please read the doc carefully!**
+**There has been a few breaking API changes since v1 (which supports adonis v3.2), please read the doc carefully!**
 
 ## Features
   - Ace commands for generating jobs and start workers
@@ -24,7 +24,7 @@ In your **star/app.js**, edit the following:
 - add `'adonis-queue-pro/providers/QueueProvider'` to your providers array.
 - add `'adonis-queue-pro/providers/CommandProvider'` to your aceProviders array.
 - add `Queue: 'Adonis/Addons/Queue'` to your aliases object
-- add below commands to your commands array
+- add the following commands to your commands array
 
 `'Adonis/Commands/Queue:Init'`
 
@@ -35,11 +35,11 @@ In your **star/app.js**, edit the following:
 ## Consumer/Producer model
 Instead of defining Job as a single entity, this library separates the responsibility of job into consumer and producer, here are the definitions:
 
-**Producer:** Defines the static properties of the job, in kue's context,  **supported** properties include **priority, attempts, backOff, delay, ttl and unique**. Documentations of each property can be found in Kue and Kue-scheduler's Github.
+**Producer:** Define the static properties of the job, in kue's context,  **supported** properties include **priority, attempts, backOff, delay, ttl and unique**. Documentations of each property can be found in Kue and Kue-scheduler's Github.
 
-**Consumer:** Defines the runtime actions of the job, in kue's context,  **supported** actions include **concurrency** and the process handler.
+**Consumer:** Define the runtime properties of the job, in kue's context,  **supported** properties include **concurrency** and the process handler.
 
-Example of a basic producer/consumer pair can be found by generating a sample job using the ``./ace queue:generate`` command.
+Example of a basic producer/consumer pair can be found by generating a sample job using the ``./ace queue:job`` command.
 
 ## CLI API
 
@@ -62,9 +62,9 @@ $ ./ace queue:job SendEmail --jobId='send-email'
 ```
 The option `jobId` is optional, if not provided, the kue type for the job will be a kebab-case of the argument. i.e. SendEmail -> send-email.
 
-This command will create job producers and consumers in directory configurable in **config/queue.js** with **consumerPath** and **producerPath**. Default to **app/Jobs/{Consumers | Producers}**.
+This command will create job producers and consumers in designated directories, which are configurable in **config/queue.js** with **consumerPath** and **producerPath**; this defaults to **app/Jobs/{Consumers | Producers}**.
 
-The job consumers and producers will both run in Adonis framework context, thus you can easily use any supported libraries within the job file. 
+The job consumers and producers will both run in Adonis framework's context, thus you can easily use any supported libraries within the job file. 
 
 #### Remove a job
 
@@ -102,17 +102,17 @@ onInit(Kue/Job job)
 onEnqueue(String jobType)
 onStart(String jobType)
 onPromotion(String jobType)
-onRemove(String jobType)
 onProgress(Float progress)
 // data returned from handle() method
 onComplete(Object data)
+onRemove(String jobType)
 // error caught in the handle() method
 onFailed(Error error)
 onFailedAttempts(Error error)
 ```
 This producer job class itself is an Event Listener, thus you can export the data received from the job event to the outside world. 
 
-A useful scenario is to remove job by id, which is retrievable from the `onInit` method: 
+A useful scenario is to remove job after it has been initialized: 
 
 ```js
 // within job producer class
@@ -121,7 +121,7 @@ onInit(job) {
 }
 // outside of the consumer
 // for queue.remove() see Queue API below
-job.on('init', id => Queue.remove(id));
+job.on('init', () => Queue.remove(job));
 ```
 
 ## Queue API
@@ -149,11 +149,11 @@ Queue.dispatch(new ExampleJob, '2 seconds from now');
 ```
 ### Remove jobs
 
-Remove a single job by id:
+Remove a single job, the argument must be the **job instance** you created:
 
 ```js
 // asynchronous removal...
-Queue.remove(id).then(response => {}, error => {});
+Queue.remove(job).then(response => {}, error => {});
 ```
 
 Clear all jobs:
@@ -162,6 +162,8 @@ Clear all jobs:
 // also returns a promise
 Queue.clear().then(response => {}, error => {});
 ```
+
+Note: currently <i>clear()</i> will not trigger the <i>remove</i> event on the job.
 
 ### Run tests
 
