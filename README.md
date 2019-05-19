@@ -80,7 +80,7 @@ $ ./ace queue:work 4
 ```
 The argument defines the number of workers to run simultaneously. Default to 1 if not provided. 
 
-**Notice**: This command only support a simple ``fork`` based process manager which is easy for local testing. It does not handle worker failure nor graceful restart. For production usage, you can use tools such as [Supervisor](https://github.com/Supervisor/supervisor) or [PM2](https://github.com/Unitech/pm2), and the command will be ``node queue_server.js`` in your app directory.
+**Notice**: This command only supports a simple ``fork`` based process manager which is easy for local testing. It does not handle worker failure nor graceful restart. For production usage, you can use tools such as [Supervisor](https://github.com/Supervisor/supervisor) or [PM2](https://github.com/Unitech/pm2), and the command will be ``node start/queue.js`` in your app’s root directory.
 
 ## Job API
 
@@ -117,11 +117,11 @@ A useful scenario is to remove job after it has been initialized:
 ```js
 // within job producer class
 onInit(job) {
-    this.emit('init', job.id);
+    this.emit('init');
 }
 // outside of the consumer
 // for queue.remove() see Queue API below
-job.on('init', () => Queue.remove(job));
+job.on('init', () => Queue.remove(job).then(...));
 ```
 
 ## Queue API
@@ -176,7 +176,8 @@ You can also contribute to the test repo by submitting issues and PRs.
 Contributions are welcome! This is a community project so please send a pull request whenever you feel like to!
 
 ### Todos
- - Complete Kue API integration
+ - Expose API for graceful failure/restart
+ - Improve efficiency
  - Squash bugs
 
 License
